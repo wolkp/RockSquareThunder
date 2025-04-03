@@ -63,7 +63,7 @@ namespace Unity.BossRoom.Gameplay.UI
             m_IsLockedIn = lockedIn;
             m_Checkmark.SetActive(lockedIn);
         }
-
+        
         public void ConfigureForClass(CharacterClass characterClass)
         {
             m_HideWhenNoClassSelected.SetActive(true);
@@ -88,12 +88,21 @@ namespace Unity.BossRoom.Gameplay.UI
             {
                 iconSlot.gameObject.SetActive(true);
                 iconSlot.sprite = action.Config.Icon;
-                UITooltipDetector tooltipDetector = iconSlot.GetComponent<UITooltipDetector>();
-                if (tooltipDetector)
-                {
-                    tooltipDetector.SetText(string.Format(m_TooltipFormat, action.Config.DisplayedName, action.Config.Description));
-                }
+                SetTooltipsData(iconSlot.transform, action);
             }
+        }
+
+        private void SetTooltipsData(Transform tooltipDetectorParent, Action action)
+        {
+            var descriptionDataProvider = tooltipDetectorParent.GetComponent<ActionDescriptionTooltipDataProvider>();
+            var statsDataProvider = tooltipDetectorParent.GetComponent<ActionStatsTooltipDataProvider>();
+
+            string displayedName = action.Config.DisplayedName;
+            string description = action.Config.Description;
+            string stats = action.Config.GetFormattedStatsText();
+
+            descriptionDataProvider.SetTooltipText(() => string.Format(m_TooltipFormat, displayedName, description));
+            statsDataProvider.SetTooltipText(() => stats);
         }
     }
 }

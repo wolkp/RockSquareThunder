@@ -60,7 +60,8 @@ namespace Unity.BossRoom.Gameplay.UI
         {
             public readonly ActionButtonType Type;
             public readonly UIHUDButton Button;
-            public readonly UITooltipDetector Tooltip;
+            public readonly UITooltipDataProvider DescriptionTooltipDataProvider;
+            public readonly UITooltipDataProvider StatsTooltipDataProvider;
 
             /// <summary> T
             /// The current Action that is used when this button is pressed.
@@ -73,7 +74,9 @@ namespace Unity.BossRoom.Gameplay.UI
             {
                 Type = type;
                 Button = button;
-                Tooltip = button.GetComponent<UITooltipDetector>();
+                DescriptionTooltipDataProvider = button.GetComponent<ActionDescriptionTooltipDataProvider>();
+                StatsTooltipDataProvider = button.GetComponent<ActionStatsTooltipDataProvider>();
+
                 m_Owner = owner;
             }
 
@@ -250,11 +253,13 @@ namespace Unity.BossRoom.Gameplay.UI
             // first find the info we need (sprite and description)
             Sprite sprite = null;
             string description = "";
+            string stats = "";
 
             if (action != null)
             {
                 sprite = action.Config.Icon;
                 description = action.Config.Description;
+                stats = action.Config.GetFormattedStatsText();
             }
 
             // set up UI elements appropriately
@@ -267,7 +272,8 @@ namespace Unity.BossRoom.Gameplay.UI
                 buttonInfo.Button.gameObject.SetActive(true);
                 buttonInfo.Button.interactable = isClickable;
                 buttonInfo.Button.image.sprite = sprite;
-                buttonInfo.Tooltip.SetText(description);
+                buttonInfo.DescriptionTooltipDataProvider.SetTooltipText(() => description);
+                buttonInfo.StatsTooltipDataProvider.SetTooltipText(() => stats);
             }
 
             // store the action type so that we can retrieve it in click events
