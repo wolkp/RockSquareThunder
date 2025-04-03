@@ -1,15 +1,19 @@
 using UnityEngine;
 
-public class HideObjectsOnEnable : MonoBehaviour
+namespace Unity.BossRoom.Utils
 {
-    [SerializeField]
-    private GameObject[] m_ObjectsToHide;
-
-    private void OnEnable()
+    public class HideObjectsOnEnable : MonoBehaviour
     {
-        foreach(var objectToHide in m_ObjectsToHide)
+        [SerializeField]
+        private GameObject[] m_ObjectsToHide;
+
+        private void OnEnable()
         {
-            objectToHide?.SetActive(false);
+            foreach (var objectToHide in m_ObjectsToHide)
+            {
+                objectToHide?.SetActive(false);
+            }
         }
     }
+
 }

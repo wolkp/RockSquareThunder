@@ -1,13 +1,14 @@
-using Cysharp.Threading.Tasks;
-using Unity.BossRoom.Gameplay.UI;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "UI/TooltipBehaviors/ShowOnClick")]
-public class ShowOnClickTooltipBehavior : TooltipBehavior
+namespace Unity.BossRoom.Gameplay.UI
 {
-    public override void OnPointerClick(UITooltipPopup tooltipPopup, UITooltipDataProvider dataProvider, Vector3 position)
+    [CreateAssetMenu(menuName = "UI/TooltipBehaviors/ShowOnClick")]
+    public class ShowOnClickTooltipBehavior : TooltipBehavior
     {
-        base.OnPointerClick(tooltipPopup, dataProvider, position);
-        tooltipPopup.ShowTooltip(position);
+        public override void OnPointerClick(UITooltipPopup tooltipPopup, UITooltipDataProvider dataProvider, Vector3 position)
+        {
+            base.OnPointerClick(tooltipPopup, dataProvider, position);
+            tooltipPopup.ShowTooltip(position);
+        }
     }
 }

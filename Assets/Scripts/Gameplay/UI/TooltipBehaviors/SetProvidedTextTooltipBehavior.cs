@@ -1,13 +1,15 @@
-using Unity.BossRoom.Gameplay.UI;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "UI/TooltipBehaviors/SetProvidedText")]
-public class SetProvidedTextTooltipBehavior : TooltipBehavior
+namespace Unity.BossRoom.Gameplay.UI
 {
-    public override void OnPointerEnter(UITooltipPopup tooltipPopup, UITooltipDataProvider dataProvider, Vector3 position)
+    [CreateAssetMenu(menuName = "UI/TooltipBehaviors/SetProvidedText")]
+    public class SetProvidedTextTooltipBehavior : TooltipBehavior
     {
-        base.OnPointerEnter(tooltipPopup, dataProvider, position);
-        string providedText = dataProvider.GetTooltipText?.Invoke();
-        tooltipPopup.SetText(providedText);
+        public override void OnPointerEnter(UITooltipPopup tooltipPopup, UITooltipDataProvider dataProvider, Vector3 position)
+        {
+            base.OnPointerEnter(tooltipPopup, dataProvider, position);
+            string providedText = dataProvider.GetTooltipText?.Invoke();
+            tooltipPopup.SetText(providedText);
+        }
     }
 }

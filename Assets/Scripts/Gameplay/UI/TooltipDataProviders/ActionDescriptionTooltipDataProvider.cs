@@ -1,3 +1,7 @@
-public class ActionDescriptionTooltipDataProvider : UITooltipDataProvider
+
+namespace Unity.BossRoom.Gameplay.UI
 {
+    public class ActionDescriptionTooltipDataProvider : UITooltipDataProvider
+    {
+    }
 }
