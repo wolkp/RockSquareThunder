@@ -6,8 +6,8 @@ using UnityEngine.Assertions;
 namespace Unity.BossRoom.Gameplay.UI
 {
     /// <summary>
-    /// This controls the tooltip popup -- the little text blurb that appears when you hover your mouse
-    /// over an ability icon.
+    /// Represents the visual tooltip popup that displays a text blurb when activated. 
+    /// It is responsible for displaying the tooltip's content, positioning it on the screen, and hiding it when no longer needed.
     /// </summary>
     public class UITooltipPopup : MonoBehaviour
     {
@@ -21,6 +21,9 @@ namespace Unity.BossRoom.Gameplay.UI
         [SerializeField]
         private Vector3 m_CursorOffset;
 
+        private string m_Text;
+        private string m_TextFormat = "{0}";
+
         private void Awake()
         {
             Assert.IsNotNull(m_Canvas);
@@ -29,11 +32,10 @@ namespace Unity.BossRoom.Gameplay.UI
         /// <summary>
         /// Shows a tooltip at the given mouse coordinates.
         /// </summary>
-        public void ShowTooltip(string text, Vector3 screenXy)
+        public void ShowTooltip(Vector3 screenXy)
         {
             screenXy += m_CursorOffset;
             m_WindowRoot.transform.position = GetCanvasCoords(screenXy);
-            m_TextField.text = text;
             m_WindowRoot.SetActive(true);
         }
 
@@ -46,15 +48,47 @@ namespace Unity.BossRoom.Gameplay.UI
         }
 
         /// <summary>
+        /// Sets the displayed text.
+        /// </summary>
+        public void SetText(string text)
+        {
+            m_Text = text;
+            UpdateTextField();
+        }
+
+        /// <summary>
+        /// Sets the format of the displayed text.
+        /// Html-esque tags allowed!
+        /// </summary>
+        public void SetTextFormat(string format)
+        {
+            m_TextFormat = format;
+            UpdateTextField();
+        }
+
+        /// <summary>
+        /// Updates the text field with the cached text and applied text format
+        /// </summary>
+        private void UpdateTextField()
+        {
+            var formattedText = string.Format(m_TextFormat, m_Text);
+            m_TextField.text = formattedText;
+        }
+
+        /// <summary>
         /// Maps screen coordinates (e.g. Input.mousePosition) to coordinates on our Canvas.
         /// </summary>
         private Vector3 GetCanvasCoords(Vector3 screenCoords)
         {
             Vector2 canvasCoords;
+
+            // To ensure proper position calculation on Overlay Canvases
+            Camera canvasCamera = m_Canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : m_Canvas.worldCamera;
+
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 m_Canvas.transform as RectTransform,
                 screenCoords,
-                m_Canvas.worldCamera,
+                canvasCamera,
                 out canvasCoords);
             return m_Canvas.transform.TransformPoint(canvasCoords);
         }
