@@ -105,5 +105,14 @@ namespace Unity.BossRoom.Gameplay.Actions
 
             return false;
         }
+
+        /// <summary>
+        /// Get a formatted string for the tooltip.
+        /// </summary>
+        public string GetFormattedStatsText()
+        {
+            var tooltipFormatter = new ActionTooltipFormatter(this);
+            return tooltipFormatter.GetFormattedTooltipText();
+        }
     }
 }
